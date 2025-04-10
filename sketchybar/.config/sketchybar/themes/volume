@@ -1,0 +1,14 @@
+#!/usr/bin/env zsh
+
+source "$CONFIG_DIR/environment"
+source "$THEME_DIR/catppuccin"
+
+VOLUME_ICON_HIGH=""
+VOLUME_ICON_NORMAL=""
+VOLUME_ICON_LOW=""
+VOLUME_ICON_OFF=""
+
+VOLUME_COLOR_HIGH=$mauve
+VOLUME_COLOR_NORMAL=$green
+VOLUME_COLOR_LOW=$peach
+VOLUME_COLOR_OFF=$red

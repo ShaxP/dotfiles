@@ -1,0 +1,32 @@
+#!/usr/bin/env zsh
+
+source "$CONFIG_DIR/environment"
+source "$THEME_DIR/catppuccin"
+source "$THEME_DIR/aerospace"
+
+if [ "$SENDER" = "aerospace_workspace_change" ]; then
+  if [ "$1" = "$FOCUSED_WORKSPACE" ]; then
+    sketchybar --set $NAME \
+                     label.font="$LABEL_HIGHLIGHT_FONT" \
+                     label.drawing=on \
+                     icon.drawing=on \
+                     icon="$ACTIVE_WORKSPACE_ICON" \
+                     icon.font="$ACTIVE_WORKSPACE_ICON_FONT"
+  else
+    windows_count=$(aerospace list-windows --workspace $1 --count)
+    if [ $windows_count -eq 0 ] ; then
+      VISIBLE="off"
+    else
+      VISIBLE="on"
+    fi
+    sketchybar --set $NAME \
+                     label.font="$LABEL_FONT" \
+                     label.drawing=$VISIBLE \
+                     icon.drawing=$VISIBLE \
+                     icon="$WORKSPACE_ICON" \
+                     icon.font="$WORKSPACE_ICON_FONT"
+  fi
+  sketchybar --update
+fi
+
+

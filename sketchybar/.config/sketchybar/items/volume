@@ -1,0 +1,25 @@
+#!/usr/bin/env zsh
+
+source "$CONFIG_DIR/environment"
+source "$THEME_DIR/catppuccin"
+source "$HELPERS_DIR/helpers"
+
+VOLUME_LABEL_COLOR="$LABEL_COLOR"
+VOLUME_BACKGROUND_BORDER_COLOR="$VOLUME_LABEL_COLOR"
+
+volume_item_builder() {
+  name=$1
+  position=$2
+  sketchybar --add item  $name $position \
+             --subscribe $name volume_change \
+             --set       $name \
+                         background.drawing=off \
+                         label.color="$VOLUME_LABEL_COLOR" \
+                         label.padding_right=0 \
+                         label.padding_left=0 \
+                         script="$PLUGIN_DIR/$name"
+}
+
+
+POSITION=$1
+build_bracket volume $POSITION $VOLUME_BACKGROUND_BORDER_COLOR

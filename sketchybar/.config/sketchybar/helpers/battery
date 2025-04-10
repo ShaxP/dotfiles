@@ -1,0 +1,48 @@
+#!/usr/bin/env zsh
+
+source "$CONFIG_DIR/environment"
+source "$THEME_DIR/battery"
+
+get_battery_level() {
+  echo $(pmset -g batt | grep -Eo "\d+%" | cut -d% -f1)
+}
+
+get_charging_status() {
+  echo $(pmset -g batt | grep 'AC Power')
+}
+
+get_battery_label() {
+  battery_level=$(get_battery_level)
+  if [ "$battery_level" = "" ]; then
+    label="230 volt"
+  else
+    label="${battery_level}%"
+  fi
+  echo $label
+}
+
+get_battery_icon() {
+  battery_level=$(get_battery_level)
+  case ${battery_level} in
+    9[0-9]|100) ICON=$BATTERY_ICON_100
+    ;;
+    [6-8][0-9]) ICON=$BATTERY_ICON_75
+    ;;
+    [3-5][0-9]) ICON=$BATTERY_ICON_50
+    ;;
+    [1-2][0-9]) ICON=$BATTERY_ICON_25
+    ;;
+    *) ICON=$BATTERY_ICON_0
+  esac
+  
+  charging_status=$(get_charging_status)
+  if [[ $charging_status != "" ]]; then
+    if [ "$battery_level" = "" ]; then
+      ICON=$BATTERY_ICON_AC
+    else
+      ICON=$BATTERY_ICON_CHARGING
+    fi
+  fi
+  echo $ICON
+}
+

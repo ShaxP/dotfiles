@@ -1,0 +1,12 @@
+#!/usr/bin/env zsh
+
+source "$HELPERS_DIR/helpers"
+
+POSITION=$1
+WIDTH=$2
+NAME="spacer_$(next_counter)"
+#echo "spacer NAME is $NAME"
+sketchybar --add item $NAME $POSITION \
+           --set      $NAME \
+                      width=$WIDTH \
+                      background.drawing=off

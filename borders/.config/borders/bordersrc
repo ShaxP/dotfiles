@@ -1,0 +1,23 @@
+#!/bin/bash
+
+yellow="0xfff9e2af"
+pink="0xfff5c2e7"
+peach="0xfffab387"
+green="0xffa6e3a1"
+red="0xfff38ba8"
+teal="0xff94e2d5"
+sky="0xff89dceb"
+blue="0xff89b4fa"
+overlay0="0xff6c7086"
+base="0xff1e1e2e"
+
+
+options=(
+	style=round
+	width=6.0
+	hidpi=on
+	active_color="$green"
+	inactive_color="$overlay0"
+)
+
+borders "${options[@]}"

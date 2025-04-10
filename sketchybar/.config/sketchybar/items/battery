@@ -1,0 +1,27 @@
+#!/bin/zsh
+
+source "$CONFIG_DIR/environment"
+source "$THEME_DIR/catppuccin"
+source "$HELPERS_DIR/helpers"
+
+BATTERY_LABEL_COLOR="$LABEL_COLOR"
+BATTERY_BACKGROUND_BORDER_COLOR="$BATTERY_LABEL_COLOR"
+
+battery_item_builder() {
+  name=$1
+  position=$2
+  sketchybar --add item $name $position \
+             --set $name \
+                        update_freq=120 \
+                        script="$PLUGIN_DIR/battery" \
+                        label.padding_left=0 \
+                        background.drawing=off \
+                        label.color="$BATTERY_LABEL_COLOR" \
+                        label.padding_right=0 \
+             --subscribe battery system_woke power_source_change
+}
+
+POSITION=$1
+build_bracket battery $POSITION $BATTERY_BACKGROUND_BORDER_COLOR
+
+

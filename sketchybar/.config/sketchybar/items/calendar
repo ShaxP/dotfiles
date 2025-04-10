@@ -1,0 +1,27 @@
+  #!/usr/bin/env zsh
+
+  source "$CONFIG_DIR/environment"
+  source "$THEME_DIR/catppuccin"
+  source "$HELPERS_DIR/helpers"
+
+  CALENDAR_LABEL_COLOR="$LABEL_COLOR"
+  CALENDAR_BACKGROUND_BORDER_COLOR="$CALENDAR_LABEL_COLOR"
+
+  calendar_item_builder() {
+    name=$1
+    position=$2
+    sketchybar --add item $name $position \
+               --set      $name \
+                          icon=  \
+                          background.drawing=off \
+                          label.color="$CALENDAR_LABEL_COLOR" \
+                          label.padding_left=0 \
+                          label.padding_right=0 \
+                          update_freq=10 \
+                          script="$PLUGIN_DIR/$name"
+  }
+
+  POSITION=$1
+build_bracket calendar $POSITION $CALENDAR_BACKGROUND_BORDER_COLOR
+
+

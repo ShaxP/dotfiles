@@ -1,0 +1,79 @@
+#!/usr/bin/env zsh
+
+black="0xff24283b"
+transparent="0x00000000"
+white="0xffa9b1d6"
+
+# Catppuccin color palette
+rosewater="0xfff5e0dc"
+flamingo="0xfff2cdcd"
+pink="0xfff5c2e7"
+mauve="0xffcba6f7"
+red="0xfff38ba8"
+maroon="0xffeba0ac"
+peach="0xfffab387"
+yellow="0xfff9e2af"
+green="0xffa6e3a1"
+teal="0xff94e2d5"
+sky="0xff89dceb"
+sapphire="0xff74c7ec"
+blue="0xff89b4fa"
+lavender="0xffb4befe"
+text="0xffcdd6f4"
+subtext1="0xffbac2de"
+subtext0="0xffa6adc8"
+overlay2="0xff9399b2"
+overlay1="0xff7f849c"
+overlay0="0xff6c7086"
+surface2="0xff585b70"
+surface1="0xff45475a"
+surface0="0xff313244"
+base="0xff1e1e2e"
+mantle="0xff181825"
+crust="0xff11111b"
+
+# Bar
+## Colors
+BAR_COLOR="$transparent"
+BAR_BLUR_RADIUS=30
+
+## Geometry
+BAR_POSITION="top"
+BAR_HEIGHT=48
+BAR_PADDING=0
+BAR_Y_OFFSET=6
+BAR_CORNER_RADIUS=8
+BAR_MARGIN=24
+BAR_SPACING_LEFT=20
+BAR_SPACING_RIGHT=12
+
+# Item Defaults
+## Colors
+BACKGROUND_COLOR="$base"
+BACKGROUND_BORDER_COLOR="$green"
+BACKGROUND_BORDER_WIDTH=0
+LABEL_ALIGN="center"
+LABEL_COLOR="$BACKGROUND_BORDER_COLOR"
+LABEL_HIGHLIGHT_COLOR="$pink"
+
+## Fonts
+FONT_SIZE="14.0"
+HIGHLIGHT_FONT_SIZE="16.0"
+ICON_BASE_FONT="Font Awesome 6 Duotone"
+ICON_BASE_FONT_STYLE="Solid"
+ICON_FONT="$ICON_BASE_FONT:$ICON_BASE_FONT_STYLE:$FONT_SIZE"
+ICON_BASE_FONT_BRANDS="Font Awesome 6 Brands"
+ICON_BASE_FONT_STYLE_BRANDS="Regular"
+ICON_FONT_BRANDS="$ICON_BASE_FONT_BRANDS:$ICON_BASE_FONT_STYLE_BRANDS:$FONT_SIZE"
+LABEL_BASE_FONT="SF Pro"
+LABEL_FONT="$LABEL_BASE_FONT:Semibold:$FONT_SIZE"
+LABEL_HIGHLIGHT_FONT="$LABEL_BASE_FONT:Bold:$HIGHLIGHT_FONT_SIZE"
+
+## Geometry
+BACKGROUND_CORNER_RADIUS=4
+BACKGROUND_HEIGHT=32
+LABEL_Y_OFFSET=1
+LABEL_PADDING=4
+BRACKET_BACKGROUND_BORDER_WIDTH=2
+BRACKET_BACKGROUND_CORNER_RADIUS=16
+ICON_PADDING=8

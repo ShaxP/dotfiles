@@ -1,0 +1,8 @@
+#!/usr/bin/env zsh
+
+source "$CONFIG_DIR/environment"
+source "$HELPERS_DIR/battery"
+
+ICON=$(get_battery_icon)
+LABEL=$(get_battery_label)
+sketchybar --set $NAME icon="$ICON" label="${LABEL}"

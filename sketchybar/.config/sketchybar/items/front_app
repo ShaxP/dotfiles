@@ -1,0 +1,26 @@
+#!/usr/bin/env zsh
+
+source "$CONFIG_DIR/environment"
+source "$THEME_DIR/catppuccin"
+source "$HELPERS_DIR/helpers"
+
+FRONT_APP_LABEL_COLOR="$red"
+FRONT_APP_BACKGROUND_BORDER_COLOR="$red"
+
+front_app_item_builder() {
+  name=$1
+  position=$2
+
+  sketchybar --add item  $name $position \
+             --subscribe $name front_app_switched \
+             --set       $name \
+                         background.drawing=off \
+                         icon=  \
+                         icon.color="$FRONT_APP_LABEL_COLOR" \
+                         label.color="$FRONT_APP_LABEL_COLOR" \
+                         label.padding_left=0 \
+                         label.padding_right=0 \
+                         script="$PLUGIN_DIR/front_app"
+}
+
+build_bracket front_app left $FRONT_APP_BACKGROUND_BORDER_COLOR

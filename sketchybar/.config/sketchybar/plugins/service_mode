@@ -1,0 +1,32 @@
+#!/usr/bin/env zsh
+
+source "$CONFIG_DIR/environment"
+source "$THEME_DIR/catppuccin"
+source "$THEME_DIR/service_mode"
+source "$HELPERS_DIR/helpers"
+
+if [ "$SENDER" = "aerospace_service_mode_enabled_changed" ]; then
+  if [ "$AEROSPACE_SERVICE_MODE_ENABLED" = true ]; then
+    sketchybar --set $NAME \
+                     background.border_color="$SERVICE_MODE_COLOR" \
+                     label.color="$SERVICE_MODE_COLOR" \
+                     label="Service mode" \
+                     icon.color="$SERVICE_MODE_COLOR"
+    sketchybar --set ${NAME}_bracket \
+                      background.border_color="$SERVICE_MODE_COLOR"
+    sketchybar --set ${NAME}_toggle \
+                     icon=$(get_toggle_icon true) \
+                     icon.color="$SERVICE_MODE_COLOR"
+  else
+    sketchybar --set $NAME \
+                     background.border_color="$SERVICE_MODE_DISABLED_COLOR" \
+                     label.color="$SERVICE_MODE_DISABLED_COLOR" \
+                     label="Service mode" \
+                     icon.color="$SERVICE_MODE_DISABLED_COLOR"
+    sketchybar --set ${NAME}_bracket \
+                     background.border_color="$SERVICE_MODE_DISABLED_COLOR" 
+    sketchybar --set ${NAME}_toggle \
+                     icon=$(get_toggle_icon false) \
+                     icon.color="$SERVICE_MODE_DISABLED_COLOR"
+  fi
+fi

@@ -1,0 +1,30 @@
+#!/usr/bin/env zsh
+
+source "$CONFIG_DIR/environment"
+source "$HELPERS_DIR/helpers"
+source "$THEME_DIR/catppuccin"
+source "$THEME_DIR/service_mode"
+
+service_mode_item_builder() {
+  echo "$SERVICE_MODE_ICON_FONT"
+  name=$1
+  position=$2
+  sketchybar --add item  $name left \
+             --subscribe $name aerospace_service_mode_enabled_changed \
+             --set       $name \
+                         background.drawing=off \
+                         icon=$SERVICE_MODE_ICON \
+                         icon.color="$SERVICE_MODE_DISABLED_COLOR" \
+                         label.drawing=on \
+                         label.highlight=off \
+                         label.font="$LABEL_FONT" \
+                         label="Service mode" \
+                         label.padding_right=10 \
+                         label.color="$SERVICE_MODE_DISABLED_COLOR" \
+                         script="$PLUGIN_DIR/$name $AEROSPACE_SERVICE_MODE_ENABLED"
+}
+
+sketchybar --add event aerospace_service_mode_enabled_changed
+
+POSITION=$1
+build_toggle_bracket service_mode $POSITION $SERVICE_MODE_DISABLED_COLOR false

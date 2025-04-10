@@ -1,0 +1,11 @@
+#!/usr/bin/env zsh
+
+source "$THEME_DIR/catppuccin"
+
+# Icons
+SERVICE_MODE_ICON=""
+SERVICE_MODE_ON_ICON=""
+SERVICE_MODE_OFF_ICON=""
+# Colors
+SERVICE_MODE_COLOR=$green
+SERVICE_MODE_DISABLED_COLOR=$overlay2
