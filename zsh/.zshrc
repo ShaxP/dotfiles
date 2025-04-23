@@ -1,5 +1,5 @@
 export LANG="en_US.UTF-8"
-
+export EZA_CONFIG_DIR="$HOME/.config/eza"
 # Run Tmux, if not already running in a session
 if [ "$TMUX" = "" ]; then tmux; fi
 
@@ -110,6 +110,16 @@ bindkey "^[[B" history-beginning-search-forward
 # Compilation flags
 # export ARCHFLAGS="-arch $(uname -m)"
 
+# Activate zsh-autosuggestions
+source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+
+# Active zsh-vi-mode
+source /opt/homebrew/opt/zsh-vi-mode/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh
+
+# Activate zsh-syntax-highlighling
+source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+
 # Set personal aliases, overriding those provided by Oh My Zsh libs,
 # plugins, and themes. Aliases can be placed here, though Oh My Zsh
 # users are encouraged to define aliases within a top-level file in
@@ -130,8 +140,16 @@ alias repos="cd ~/source/repos"
 alias dotfiles="cd ~/source/repos/dotfiles"
 alias eza="eza --icons"
 alias ls="eza"
-alias ll="eza -l"
-alias la="eza -a"
+alias ll="eza -lg"
+alias la="eza -lag"
+alias lt="eza -lTg"
+alias lt1="eza -lTg --level=1"
+alias lt2="eza -lTg --level=2"
+alias lt3="eza -lTg --level=3"
+alias lta="eza -lTag"
+alias lta1="eza -lTag --level=1"
+alias lta2="eza -lTag --level=2"
+alias lta3="eza -lTag --level=3"
 alias stow="stow -t ~/."
 # Use y to launch yazi
 function y() {
