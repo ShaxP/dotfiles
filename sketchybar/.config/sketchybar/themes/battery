@@ -1,7 +1,7 @@
 #!/usr/bin/env zsh
 
 BATTERY_ICON_100=""
-BATTERY_ICON_75="􀺸"
+BATTERY_ICON_75=""
 BATTERY_ICON_50=""
 BATTERY_ICON_25=""
 BATTERY_ICON_0=""
