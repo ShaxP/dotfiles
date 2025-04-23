@@ -11,6 +11,7 @@ palette = "catppuccin_mocha"
 [time]
 disabled = false
 format = '🕙[\[ $time \]]($style) '
+style = 'rosewater' 
 time_format = '%T'
 utc_time_offset = '2'
 # time_range = '10:00:00-14:00:00'
@@ -165,7 +166,7 @@ symbol = " "
 
 [directory]
 read_only = " 󰌾"
-style = "bold lavender"
+style = "lavender"
 truncation_length = 4
 
 [docker_context]
@@ -185,7 +186,7 @@ symbol = " "
 
 [git_branch]
 symbol = " "
-style = "bold mauve"
+style = "mauve"
 
 [git_commit]
 tag_symbol = '  '
