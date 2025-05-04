@@ -1,78 +1,10 @@
 #!/usr/bin/env zsh
 
 source "$CONFIG_DIR/environment"
-source "$THEME_DIR/catppuccin"
-source "$THEME_DIR/aerospace"
-source "$HELPERS_DIR/helpers"
-
-
-create_workspace_item() {
-  MONTITOR_ID=$1
-  WORKSPACE_ID=$2
-  VISIBLE=$3
-  sketchybar --add item  workspaces."$MONITOR_ID"."$WORKSPACE_ID" left \
-                          --subscribe workspaces."$MONITOR_ID"."$WORKSPACE_ID" aerospace_workspace_change \
-                          --set       workspaces."$MONITOR_ID"."$WORKSPACE_ID" \
-                                      background.drawing=off \
-                                      click_script="aerospace workspace $WORKSPACE_ID" \
-                                      icon=${(P)${:-WORKSPACE_ICON_$WORKSPACE_ID}} \
-                                      icon.padding_right=0 \
-                                      icon.padding_left=$ICON_PADDING \
-                                      icon.drawing=$VISIBLE \
-                                      label.drawing=Off \
-                                      script="$PLUGIN_DIR/aerospace $WORKSPACE_ID"
-   
-}
-
-create_workspace_bracket_for_monitor() {
-  active_workspace=$(aerospace list-workspaces --focused)
-  monitor_id=${@[1]}
-  monitor_workspaces=${@:2}
-  echo "monitor_id is $monitor_id - monitor_workspaces: $monitor_workspaces - active_workspace: $active_workspace"
-
- if [ $monitor_id -eq 1 ]; then
-   sketchybar --add item workspaces_spacer_left left \
-              --set      workspaces_spacer_left \
-                         width=4 \
-                         background.drawing=off \
-                         label.drawing=off
- fi
- monitor_workspace_array=( ${=monitor_workspaces} )
- for workspace_id in $monitor_workspace_array; do
-    echo "In the loop - workspace_id is $workspace_id"
-    windows_count=$(aerospace list-windows --workspace $workspace_id --count)
-    if [ $active_workspace -eq $workspace_id ] || [ $windows_count -gt 0 ] ; then
-      create_workspace_item "$monitor_id" "$workspace_id" "on"
-    else
-      create_workspace_item "$monitor_id" "$workspace_id" "off"
-    fi
-  done
-
-  if [ $monitor_id -lt ${#monitor_ids[@]} ]; then
-    sketchybar --add item workspaces_monitor_separator."$monitor_id" left \
-               --set      workspaces_monitor_separator."$monitor_id" \
-                          background.drawing=off \
-                          label.padding_left=0 \
-                          label.padding_right=0 \
-                          label.font.size="$BACKGROUND_HEIGHT" \
-                          label="|"
-  else
-    sketchybar --add item workspaces_spacer_right left \
-               --set      workspaces_spacer_right \
-                          width=4 \
-                          background.drawing=off \
-                          label.drawing=off
-  fi
-
-  sketchybar --add bracket workspaces."$monitor_id" "/workspaces\.*/" \
-             --set         workspaces."$monitor_id" \
-                           background.padding_left="1" \
-                           background.corner_radius="$BRACKET_BACKGROUND_CORNER_RADIUS" \
-                           background.border_width="$BRACKET_BACKGROUND_BORDER_WIDTH"
-}
-
+source "$HELPERS_DIR/aerospace"
 
 sketchybar --add event aerospace_workspace_change
+sketchybar --add event aerospace_verbose_mode_toggled
 
 monitor_ids=( $(aerospace list-monitors | awk '{print $1}') )
 # TODO:
