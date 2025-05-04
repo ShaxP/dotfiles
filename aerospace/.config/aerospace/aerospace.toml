@@ -189,6 +189,14 @@ automatically-unhide-macos-hidden-apps = false
     alt-shift-k = ['join-with up', 'mode main', 'exec-and-forget sketchybar --trigger aerospace_service_mode_enabled_changed AEROSPACE_SERVICE_MODE_ENABLED=false']
     alt-shift-l = ['join-with right', 'mode main', 'exec-and-forget sketchybar --trigger aerospace_service_mode_enabled_changed AEROSPACE_SERVICE_MODE_ENABLED=false']
 
+    # The key v will trigger sketchybar to toggle between verbose and non-verbose mode.
+    # These modes are not builtin to Sketchybar and implmented using a trigger
+    v = [
+      'mode main',
+      'exec-and-forget sketchybar --trigger aerospace_service_mode_enabled_changed AEROSPACE_SERVICE_MODE_ENABLED=false',
+      'exec-and-forget sketchybar --trigger aerospace_verbose_mode_toggled'
+    ]
+
     #down = 'volume down'
     #up = 'volume up'
     #shift-down = ['volume set 0', 'mode main']
