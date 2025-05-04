@@ -3,6 +3,7 @@
 source "$CONFIG_DIR/environment"
 source "$THEME_DIR/catppuccin"
 source "$THEME_DIR/aerospace"
+source "$HELPERS_DIR/aerospace"
 
 if [ "$SENDER" = "aerospace_workspace_change" ]; then
   if [ "$1" = "$FOCUSED_WORKSPACE" ]; then
@@ -23,6 +24,9 @@ if [ "$SENDER" = "aerospace_workspace_change" ]; then
                      icon.font="$WORKSPACE_ICON_FONT"
   fi
   sketchybar --update
+elif [ "$SENDER" = "aerospace_verbose_mode_toggled" ]; then
+  local verbose_mode=$(toggle_verbose_mode)
+  echo "Verbose mode is $verbose_mode"
 fi
 
 
