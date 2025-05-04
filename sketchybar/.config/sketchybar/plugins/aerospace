@@ -7,10 +7,8 @@ source "$THEME_DIR/aerospace"
 if [ "$SENDER" = "aerospace_workspace_change" ]; then
   if [ "$1" = "$FOCUSED_WORKSPACE" ]; then
     sketchybar --set $NAME \
-                     label.font="$LABEL_HIGHLIGHT_FONT" \
-                     label.drawing=on \
                      icon.drawing=on \
-                     icon="$ACTIVE_WORKSPACE_ICON" \
+                     icon="${(P)${:-ACTIVE_WORKSPACE_ICON_$1}}" \
                      icon.font="$ACTIVE_WORKSPACE_ICON_FONT"
   else
     windows_count=$(aerospace list-windows --workspace $1 --count)
@@ -20,10 +18,8 @@ if [ "$SENDER" = "aerospace_workspace_change" ]; then
       VISIBLE="on"
     fi
     sketchybar --set $NAME \
-                     label.font="$LABEL_FONT" \
-                     label.drawing=$VISIBLE \
                      icon.drawing=$VISIBLE \
-                     icon="$WORKSPACE_ICON" \
+                     icon="${(P)${:-WORKSPACE_ICON_$1}}" \
                      icon.font="$WORKSPACE_ICON_FONT"
   fi
   sketchybar --update

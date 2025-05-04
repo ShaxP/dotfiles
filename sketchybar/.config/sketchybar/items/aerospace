@@ -2,6 +2,7 @@
 
 source "$CONFIG_DIR/environment"
 source "$THEME_DIR/catppuccin"
+source "$THEME_DIR/aerospace"
 source "$HELPERS_DIR/helpers"
 
 
@@ -14,13 +15,11 @@ create_workspace_item() {
                           --set       workspaces."$MONITOR_ID"."$WORKSPACE_ID" \
                                       background.drawing=off \
                                       click_script="aerospace workspace $WORKSPACE_ID" \
-                                      icon="$WORKSPACE_ICON" \
+                                      icon=${(P)${:-WORKSPACE_ICON_$WORKSPACE_ID}} \
                                       icon.padding_right=0 \
                                       icon.padding_left=$ICON_PADDING \
                                       icon.drawing=$VISIBLE \
-                                      label="$WORKSPACE_ID" \
-                                      label.width="25" \
-                                      label.drawing=$VISIBLE \
+                                      label.drawing=Off \
                                       script="$PLUGIN_DIR/aerospace $WORKSPACE_ID"
    
 }
