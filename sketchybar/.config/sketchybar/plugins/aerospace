@@ -27,6 +27,7 @@ if [ "$SENDER" = "aerospace_workspace_change" ]; then
 elif [ "$SENDER" = "aerospace_verbose_mode_toggled" ]; then
   local verbose_mode=$(toggle_verbose_mode)
   echo "Verbose mode is $verbose_mode"
+  sketchybar --update
 fi
 
 
