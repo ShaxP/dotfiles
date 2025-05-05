@@ -4,49 +4,100 @@ source "$CONFIG_DIR/environment"
 source "$THEME_DIR/catppuccin"
 source "$THEME_DIR/aerospace"
 source "$HELPERS_DIR/helpers"
+source "$HELPERS_DIR/front_app"
 
+function create_app_item() {
+  MONITOR_ID=$1
+  WORKSPACE_ID=$2
+  APP=$3
+  INDEX=$4 
 
-create_workspace_item() {
-  MONTITOR_ID=$1
+  #echo "App item: $APP, index: $INDEX, monitor: $MONITOR_ID, workspace: $WORKSPACE_ID"
+
+  icon=$(get_app_icon $APP)
+  icon_font="$(get_app_icon_font $APP)"
+
+  sketchybar --add item apps."$MONITOR_ID"."$WORKSPACE_ID"."$INDEX" left \
+             --subscribe apps."$MONITOR_ID"."$WORKSPACE_ID"."$INDEX" aerospace_toggle_app_icons \
+             --set apps."$MONITOR_ID"."$WORKSPACE_ID"."$INDEX" \
+                   background.drawing=Off \
+                   icon=$icon \
+                   icon.font="$icon_font" \
+                   script="$PLUGIN_DIR/aerospace_apps"
+}
+
+function create_app_bracket_for_workspace() {
+  MONITOR_ID=$1
+  WORKSPACE_ID=$2
+ 
+  IFS=$'\n' apps=( $(aerospace list-windows --workspace $WORKSPACE_ID | awk 'BEGIN {FS="|"} {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2}') )
+  
+  app_count=${#apps[@]}
+  echo "Number of apps in monitor $MONITOR_ID, workspace $WORKSPACE_ID is $app_count"
+  
+  if [[ "$app_count" -eq "0" ]]; then
+    return 1  
+  fi
+
+  local i=1
+  for app in ${apps[@]}; do
+    create_app_item $MONITOR_ID $WORKSPACE_ID $app $i
+    let i++
+  done
+
+  sketchybar --add bracket workspaces."$MONITOR_ID"."$WORKSPACE_ID".apps "/apps\.$MONITOR_ID\.$WORKSPACE_ID\.*/" \
+             --set workspaces."$MONITOR_ID"."$WORKSPACE_ID".apps \
+                   background.drawing=Off
+
+  
+}
+
+function create_workspace_item() {
+  MONITOR_ID=$1
   WORKSPACE_ID=$2
   VISIBLE=$3
+
   sketchybar --add item  workspaces."$MONITOR_ID"."$WORKSPACE_ID" left \
                           --subscribe workspaces."$MONITOR_ID"."$WORKSPACE_ID" aerospace_workspace_change \
                           --set       workspaces."$MONITOR_ID"."$WORKSPACE_ID" \
                                       background.drawing=off \
+                                      background.padding_left="0" \
+                                      background.padding_right="0" \
                                       click_script="aerospace workspace $WORKSPACE_ID" \
                                       icon=${(P)${:-WORKSPACE_ICON_$WORKSPACE_ID}} \
-                                      icon.padding_right=0 \
+                                      icon.padding_right=$ICON_PADDING \
                                       icon.padding_left=$ICON_PADDING \
                                       icon.drawing=$VISIBLE \
                                       label.drawing=Off \
                                       script="$PLUGIN_DIR/aerospace $WORKSPACE_ID"
-  sketchybar --add bracket workspace."$MONITOR_ID"."$WORKSPACE_ID".bracket "/workspaces\.$MONITOR_ID\.$WORKSPACE_ID\.*/"
-             --set workspace."$MONITOR_ID"."$WORKSPACE_ID".bracket
-                   background.padding_left="1" \
-                   background.corner_radius="$BRACKET_BACKGROUND_CORNER_RADIUS" \
-                   background.border_width="$BRACKET_BACKGROUND_BORDER_WIDTH"
 
+#  if [[ "$(get_verbose_mode)" -eq "1" ]]; then
+    create_app_bracket_for_workspace $MONITOR_ID $WORKSPACE_ID
+    
+    sketchybar --add bracket bracket."$MONITOR_ID"."$WORKSPACE_ID" "/workspaces\.$MONITOR_ID\.$WORKSPACE_ID\.*/" \
+               --set bracket."$MONITOR_ID"."$WORKSPACE_ID" \
+                     background.border_width="0"
+#  fi
 }
 
-create_workspace_bracket_for_monitor() {
+function create_workspace_bracket_for_monitor() {
   active_workspace=$(aerospace list-workspaces --focused)
   monitor_id=${@[1]}
   monitor_workspaces=${@:2}
-  echo "monitor_id is $monitor_id - monitor_workspaces: $monitor_workspaces - active_workspace: $active_workspace"
 
  if [ $monitor_id -eq 1 ]; then
    sketchybar --add item  workspaces_spacer_left left \
               --subscribe workspaces_spacer_left aerospace_verbose_mode_toggled \
               --set       workspaces_spacer_left \
-                          width=4 \
+                          width="4" \
                           background.drawing=off \
                           label.drawing=off \
                           script="$PLUGIN_DIR/aerospace"
  fi
+
  monitor_workspace_array=( ${=monitor_workspaces} )
+
  for workspace_id in $monitor_workspace_array; do
-    # echo "In the loop - workspace_id is $workspace_id"
     windows_count=$(aerospace list-windows --workspace $workspace_id --count)
     if [ $active_workspace -eq $workspace_id ] || [ $windows_count -gt 0 ] ; then
       create_workspace_item "$monitor_id" "$workspace_id" "on"
@@ -56,31 +107,41 @@ create_workspace_bracket_for_monitor() {
   done
 
   if [ $monitor_id -lt ${#monitor_ids[@]} ]; then
-    sketchybar --add item workspaces_monitor_separator."$monitor_id" left \
-               --set      workspaces_monitor_separator."$monitor_id" \
+    sketchybar --add item bracket_workspaces_monitor_separator."$monitor_id" left \
+               --set      bracket_workspaces_monitor_separator."$monitor_id" \
                           background.drawing=off \
-                          label.padding_left=0 \
-                          label.padding_right=0 \
+                          label.padding_left="0" \
+                          label.padding_right="0" \
                           label.font.size="$BACKGROUND_HEIGHT" \
                           label="|"
   else
-    sketchybar --add item workspaces_spacer_right left \
-               --set      workspaces_spacer_right \
-                          width=4 \
+    sketchybar --add item bracket_workspaces_spacer_right left \
+               --set      bracket_workspaces_spacer_right \
+                          width="4" \
                           background.drawing=off \
                           label.drawing=off
   fi
 
-  sketchybar --add bracket workspaces."$monitor_id" "/workspaces\.*/" \
+  sketchybar --add bracket workspaces."$monitor_id" "/bracket\.*/" \
              --set         workspaces."$monitor_id" \
-                           background.padding_left="1" \
+                           background.padding_left="0" \
                            background.corner_radius="$BRACKET_BACKGROUND_CORNER_RADIUS" \
                            background.border_width="$BRACKET_BACKGROUND_BORDER_WIDTH"
 }
 
 AEROSPACE_VERBOSE_FILE=$HOME/.cache/.aerospace_verbose
 
-toggle_verbose_mode() {  
+function get_verbose_mode() {
+  local verbose_mode=0
+  
+  if [ -f $AEROSPACE_VERBOSE_FILE ] ; then
+    verbose_mode=$(cat $AEROSPACE_VERBOSE_FILE)
+  fi
+
+  echo $verbose_mode
+}
+
+function toggle_verbose_mode() {  
   if [ -f $AEROSPACE_VERBOSE_FILE ] ; then
     local verbose_mode=$(cat $AEROSPACE_VERBOSE_FILE)
     let "verbose_mode=(verbose_mode+1)%2"
