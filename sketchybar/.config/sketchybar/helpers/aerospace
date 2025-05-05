@@ -21,6 +21,12 @@ create_workspace_item() {
                                       icon.drawing=$VISIBLE \
                                       label.drawing=Off \
                                       script="$PLUGIN_DIR/aerospace $WORKSPACE_ID"
+  sketchybar --add bracket workspace."$MONITOR_ID"."$WORKSPACE_ID".bracket "/workspaces\.$MONITOR_ID\.$WORKSPACE_ID\.*/"
+             --set workspace."$MONITOR_ID"."$WORKSPACE_ID".bracket
+                   background.padding_left="1" \
+                   background.corner_radius="$BRACKET_BACKGROUND_CORNER_RADIUS" \
+                   background.border_width="$BRACKET_BACKGROUND_BORDER_WIDTH"
+
 }
 
 create_workspace_bracket_for_monitor() {
@@ -70,19 +76,11 @@ create_workspace_bracket_for_monitor() {
                            background.padding_left="1" \
                            background.corner_radius="$BRACKET_BACKGROUND_CORNER_RADIUS" \
                            background.border_width="$BRACKET_BACKGROUND_BORDER_WIDTH"
-                          
-
-#  if [[ "$monitor_id" -eq "1" ]]; then
-#    sketchybar --subscribe workspaces."$monitor_id" aerospace_verbose_mode_toggled \
-#               --set       workspaces."$monitor_id" 
-#                           script="$PLUGIN_DIR/aerospace"
-#  fi
 }
 
 AEROSPACE_VERBOSE_FILE=$HOME/.cache/.aerospace_verbose
 
 toggle_verbose_mode() {  
-  #local verbose_mode=$(get_verbose_mode)
   if [ -f $AEROSPACE_VERBOSE_FILE ] ; then
     local verbose_mode=$(cat $AEROSPACE_VERBOSE_FILE)
     let "verbose_mode=(verbose_mode+1)%2"
