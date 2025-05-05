@@ -5,6 +5,7 @@ source "$HELPERS_DIR/aerospace"
 
 sketchybar --add event aerospace_workspace_change
 sketchybar --add event aerospace_verbose_mode_toggled
+sketchybar --add event aerospace_toggle_app_icons
 
 monitor_ids=( $(aerospace list-monitors | awk '{print $1}') )
 # TODO:
