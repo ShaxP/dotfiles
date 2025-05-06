@@ -17,10 +17,20 @@ function create_app_item() {
   icon=$(get_app_icon $APP)
   icon_font="$(get_app_icon_font $APP)"
 
+  if [[ "$(get_verbose_mode)" -eq "1" ]]; then
+    visible="on"
+    width="24"
+  else
+    visible="off"
+    width="0"
+  fi
+  
   sketchybar --add item apps."$MONITOR_ID"."$WORKSPACE_ID"."$INDEX" left \
              --subscribe apps."$MONITOR_ID"."$WORKSPACE_ID"."$INDEX" aerospace_toggle_app_icons \
              --set apps."$MONITOR_ID"."$WORKSPACE_ID"."$INDEX" \
                    background.drawing=Off \
+                   width="$width" \
+                   icon.drawing=$visible \
                    icon=$icon \
                    icon.font="$icon_font" \
                    script="$PLUGIN_DIR/aerospace_apps"
@@ -44,12 +54,6 @@ function create_app_bracket_for_workspace() {
     create_app_item $MONITOR_ID $WORKSPACE_ID $app $i
     let i++
   done
-
-  sketchybar --add bracket workspaces."$MONITOR_ID"."$WORKSPACE_ID".apps "/apps\.$MONITOR_ID\.$WORKSPACE_ID\.*/" \
-             --set workspaces."$MONITOR_ID"."$WORKSPACE_ID".apps \
-                   background.drawing=Off
-
-  
 }
 
 function create_workspace_item() {
