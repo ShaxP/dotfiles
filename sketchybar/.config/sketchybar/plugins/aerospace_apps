@@ -5,16 +5,16 @@ source "$THEME_DIR/catppuccin"
 source "$THEME_DIR/aerospace"
 source "$HELPERS_DIR/aerospace"
 
-echo "Here I am 2"
-
 if [ "$SENDER" = "aerospace_toggle_app_icons" ]; then
-  echo "Here I am"
   if [[ "$(get_verbose_mode)" -eq "1" ]]; then
     visible="on"
+    width="24"
   else
     visible="off"
+    width="0"
   fi
   sketchybar --set $NAME \
+                   width="$width" \
                    icon.drawing=$visible
   sketchybar --update
 fi
