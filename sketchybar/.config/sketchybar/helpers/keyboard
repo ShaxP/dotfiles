@@ -1,0 +1,6 @@
+#!/usr/bin/env zsh
+
+get_keyboard_layout() {
+  layout=$(defaults read ~/Library/Preferences/com.apple.HIToolbox.plist AppleSelectedInputSources | grep 'KeyboardLayout Name' | sed -E 's/^.+ = \"?([^\"]+)\"?;$/\1/')
+  echo $layout
+}

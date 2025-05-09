@@ -1,0 +1,9 @@
+#!/usr/bin/env zsh
+
+source "$CONFIG_DIR/environment"
+source "$HELPERS_DIR/keyboard"
+
+layout=$(get_keyboard_layout)
+sketchybar --set "$NAME" \
+                 label="$layout"
+

@@ -1,0 +1,28 @@
+#!/usr/bin/env zsh
+
+source "$CONFIG_DIR/environment"
+source "$THEME_DIR/catppuccin"
+source "$HELPERS_DIR/helpers"
+
+KEYBOARD_LABEL_COLOR="$LABEL_COLOR"
+KEYBOARD_BACKGROUND_BORDER_COLOR="$KEYBOARD_LABEL_COLOR"
+
+keyboard_item_builder() {
+  name=$1
+  position=$2
+  sketchybar --add item $name $position \
+             --set      $name \
+                        icon=  \
+                        background.drawing=off \
+                        label.color="$KEYBOARD_LABEL_COLOR" \
+                        label.padding_left=0 \
+                        label.padding_right=0 \
+                        update_freq=1 \
+                        script="$PLUGIN_DIR/$name"
+}
+
+POSITION=$1
+build_bracket keyboard $POSITION $KEYBOARD_BACKGROUND_BORDER_COLOR
+
+
+
