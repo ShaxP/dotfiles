@@ -17,7 +17,7 @@ keyboard_item_builder() {
                         label.color="$KEYBOARD_LABEL_COLOR" \
                         label.padding_left=0 \
                         label.padding_right=0 \
-                        update_freq=1 \
+                        update_freq=5 \
                         script="$PLUGIN_DIR/$name"
 }
 
