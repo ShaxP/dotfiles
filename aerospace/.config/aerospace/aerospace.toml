@@ -197,6 +197,11 @@ automatically-unhide-macos-hidden-apps = false
       'exec-and-forget sketchybar --trigger aerospace_verbose_mode_toggled'
     ]
 
+    l = [
+      'exec-and-forget sketchybar --reload',
+      'mode main',
+       'exec-and-forget sketchybar --trigger aerospace_service_mode_enabled_changed AEROSPACE_SERVICE_MODE_ENABLED=false'
+    ] 
     #down = 'volume down'
     #up = 'volume up'
     #shift-down = ['volume set 0', 'mode main']
