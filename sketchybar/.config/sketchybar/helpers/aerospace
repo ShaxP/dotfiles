@@ -3,18 +3,18 @@
 source "$CONFIG_DIR/environment"
 source "$THEME_DIR/catppuccin"
 source "$THEME_DIR/aerospace"
+source "$HELPERS_DIR/globals"
 source "$HELPERS_DIR/helpers"
 source "$HELPERS_DIR/front_app"
 
 function create_app_item() {
-  MONITOR_ID=$1
-  DISPLAY_ID=$2
-  WORKSPACE_ID=$3
-  APP=$4
-  INDEX=$5 
+  DISPLAY_ID=$1
+  WORKSPACE_ID=$2
+  APP_NAME=$3
+  APP_ID=$4
 
-  icon=$(get_app_icon $APP)
-  icon_font="$(get_app_icon_font $APP)"
+  icon=$(get_app_icon $APP_NAME)
+  icon_font="$(get_app_icon_font $APP_NAME)"
 
   if [[ "$(get_verbose_mode)" -eq "1" ]]; then
     visible="on"
@@ -23,10 +23,12 @@ function create_app_item() {
     visible="off"
     width="0"
   fi
-  
-  sketchybar --add item apps."$MONITOR_ID"."$WORKSPACE_ID"."$INDEX" left \
-             --subscribe apps."$MONITOR_ID"."$WORKSPACE_ID"."$INDEX" aerospace_toggle_app_icons \
-             --set apps."$MONITOR_ID"."$WORKSPACE_ID"."$INDEX" \
+ 
+  name=apps."$APP_ID"
+
+  sketchybar --add item $name left \
+             --subscribe $name aerospace_toggle_app_icons \
+             --set $name \
                    display="$DISPLAY_ID" \
                    background.drawing=Off \
                    width="$width" \
@@ -34,14 +36,15 @@ function create_app_item() {
                    icon=$icon \
                    icon.font="$icon_font" \
                    script="$PLUGIN_DIR/aerospace_apps"
+  
+  add_app_to_cache $APP_ID $WORKSPACE_ID
 }
 
 function create_app_bracket_for_workspace() {
-  MONITOR_ID=$1
-  DISPLAY_ID=$2
-  WORKSPACE_ID=$3
+  DISPLAY_ID=$1
+  WORKSPACE_ID=$2
  
-  IFS=$'\n' apps=( $(aerospace list-windows --workspace $WORKSPACE_ID | awk 'BEGIN {FS="|"} {gsub(/^[ \t]+|[ \t]+$/, "", $2); print $2}') )
+  IFS=$'\n' apps=( $(aerospace list-windows --workspace $WORKSPACE_ID | awk 'BEGIN {FS="|"} {gsub(/^[ \t]+|[ \t]+$/, "", $2); gsub(/^[ \t]+|[ \t]+$/, "", $1);$1=$1; print $1":"$2}' ) )
   
   app_count=${#apps[@]}
   
@@ -49,22 +52,24 @@ function create_app_bracket_for_workspace() {
     return 1  
   fi
 
-  local i=1
   for app in ${apps[@]}; do
-    create_app_item $MONITOR_ID $DISPLAY_ID $WORKSPACE_ID $app $i
-    let i++
+    app_id=$(echo $app | awk 'BEGIN {FS=":"} {print $1}')
+    app_name=$(echo $app | awk 'BEGIN {FS=":"} {print $2}')
+    create_app_item $DISPLAY_ID $WORKSPACE_ID $app_name $app_id
   done
+
 }
 
 function create_workspace_item() {
-  MONITOR_ID=$1
-  DISPLAY_ID=$2
-  WORKSPACE_ID=$3
-  VISIBLE=$4
+  DISPLAY_ID=$1
+  WORKSPACE_ID=$2
+  VISIBLE=$3
 
-  sketchybar --add item  workspaces."$MONITOR_ID"."$WORKSPACE_ID" left \
-                          --subscribe workspaces."$MONITOR_ID"."$WORKSPACE_ID" aerospace_workspace_change \
-                          --set       workspaces."$MONITOR_ID"."$WORKSPACE_ID" \
+  init_workspace_cache $WORKSPACE_ID
+
+  sketchybar --add item  workspace."$WORKSPACE_ID" left \
+                          --subscribe workspace."$WORKSPACE_ID" aerospace_workspace_change \
+                          --set       workspace."$WORKSPACE_ID" \
                                       display="$DISPLAY_ID" \
                                       background.drawing=off \
                                       background.padding_left="0" \
@@ -77,37 +82,32 @@ function create_workspace_item() {
                                       label.drawing=Off \
                                       script="$PLUGIN_DIR/aerospace $WORKSPACE_ID"
 
-    create_app_bracket_for_workspace $MONITOR_ID $DISPLAY_ID $WORKSPACE_ID
-    
-    sketchybar --add bracket bracket."$MONITOR_ID"."$WORKSPACE_ID" "/workspaces\.$MONITOR_ID\.$WORKSPACE_ID\.*/" \
-      --set bracket."$MONITOR_ID"."$WORKSPACE_ID" \
-            display="$MONITOR_ID" \
-            background.border_width="0"
+    create_app_bracket_for_workspace $DISPLAY_ID $WORKSPACE_ID
 }
 
 function create_workspace_bracket_for_monitor() {
   active_workspace=$(aerospace list-workspaces --focused)
-  monitor_id=${@[1]}
-  monitor_workspaces=${@:2}
-  display_id=$(get_display_id "$monitor_id")
+  MONITOR_ID=${@[1]}
+  MONITOR_WORKSPACES=${@:2}
+  display_id=$(get_display_id "$MONITOR_ID")
 
-  sketchybar --add item  bracket_workspaces_spacer_left_$monitor_id left \
-           --subscribe bracket_workspaces_spacer_left_$monitor_id aerospace_verbose_mode_toggled \
-           --set       bracket_workspaces_spacer_left_$monitor_id \
+  sketchybar --add item  bracket_workspaces_spacer_left_$MONITOR_ID left \
+           --subscribe bracket_workspaces_spacer_left_$MONITOR_ID aerospace_verbose_mode_toggled \
+           --set       bracket_workspaces_spacer_left_$MONITOR_ID \
                        display="$display_id" \
                        width="8" \
                        background.drawing=off \
                        label.drawing=off \
                        script="$PLUGIN_DIR/aerospace"
 
- monitor_workspace_array=( ${=monitor_workspaces} )
+ monitor_workspace_array=( ${=MONITOR_WORKSPACES} )
 
  for workspace_id in $monitor_workspace_array; do
     windows_count=$(aerospace list-windows --workspace $workspace_id --count)
     if [ $active_workspace -eq $workspace_id ] || [ $windows_count -gt 0 ] ; then
-      create_workspace_item "$monitor_id" "$display_id" "$workspace_id" "on"
+      create_workspace_item "$display_id" "$workspace_id" "on"
     else
-      create_workspace_item "$monitor_id" "$display_id" "$workspace_id" "off"
+      create_workspace_item "$display_id" "$workspace_id" "off"
     fi
   done
 
@@ -120,16 +120,16 @@ function create_workspace_bracket_for_monitor() {
 #                          label.font.size="$BACKGROUND_HEIGHT" \
 #                          label="|"
 #  else
-    sketchybar --add item bracket_workspaces_spacer_right_$monitor_id left \
-               --set      bracket_workspaces_spacer_right_$monitor_id \
+    sketchybar --add item bracket_workspaces_spacer_right_$MONITOR_ID left \
+               --set      bracket_workspaces_spacer_right_$MONITOR_ID \
                           display=$display_id \
                           width="8" \
                           background.drawing=off \
                           label.drawing=off
 #  fi
 
-  sketchybar --add bracket workspaces."$monitor_id" "/bracket\.*/" \
-             --set         workspaces."$monitor_id" \
+  sketchybar --add bracket workspaces."$MONITOR_ID" "/bracket\.*/" \
+             --set         workspaces."$MONITOR_ID" \
                            display="$display_id" \
                            background.padding_left="0" \
                            background.corner_radius="$BRACKET_BACKGROUND_CORNER_RADIUS" \
@@ -142,7 +142,13 @@ function get_display_id() {
   echo $display_id
 }
 
-AEROSPACE_VERBOSE_FILE=$HOME/.cache/.aerospace_verbose
+AEROSPACE_CACHE_DIR=$CACHE_DIR/aerospace
+AEROSPACE_VERBOSE_FILE=$AEROSPACE_CACHE_DIR/verbose
+
+function init_aerospace_cache() {
+  echo "Creating $AEROSPACE_CACHE_DIR"
+  mkdir -p $AEROSPACE_CACHE_DIR
+}
 
 function get_verbose_mode() {
   local verbose_mode=0
@@ -163,4 +169,20 @@ function toggle_verbose_mode() {
   fi
   echo $verbose_mode > $AEROSPACE_VERBOSE_FILE
   echo $verbose_mode
+}
+
+function init_workspace_cache() {
+  WORKSPACE_ID=$1
+  filename="$AEROSPACE_CACHE_DIR/$WORKSPACE_ID"
+  if [[ ! -a $filename ]]; then
+   touch 
+  fi
+  truncate -s 0 $filename
+}
+
+function add_app_to_cache()
+{
+  APP_ID=$1
+  WORKSPACE_ID=$2
+  echo $APP_ID >> "$AEROSPACE_CACHE_DIR/$WORKSPACE_ID"
 }
