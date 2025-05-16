@@ -1,5 +1,8 @@
 #!/usr/bin/env zsh
 
+source "$CONFIG_DIR/environment"
+source "$HELPERS_DIR/globals"
+ 
 build_spacer() {
   name=$1
   position=$2
@@ -83,7 +86,10 @@ change_bracket_color() {
                    icon.color="$border_color" 
 }
 
-COUNTER_FILE=$HOME/.cache/.sketchy_counter
+init_cache() {
+  mkdir -p $CACHE_DIR
+  init_counter
+}
 
 init_counter() {
   echo 0 > $COUNTER_FILE
