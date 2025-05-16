@@ -1,0 +1,5 @@
+#!/usr/bin/env zsh
+
+CACHE_DIR=$HOME/.cache/sketchybar
+COUNTER_FILE=$CACHE_DIR/counter
+
