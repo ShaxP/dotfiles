@@ -5,8 +5,8 @@ source "$CONFIG_DIR/items.sh"
 source "$THEME_DIR/catppuccin"
 source "$HELPERS_DIR/helpers"
 
-#initialize spacer counter
-init_counter
+#initialize the cache and spacer counter
+init_cache
 
 
 # Configure general bar appearance.
