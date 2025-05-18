@@ -28,5 +28,21 @@ elif [ "$SENDER" = "aerospace_verbose_mode_toggled" ]; then
   local verbose_mode=$(toggle_verbose_mode)
   echo "Verbose mode is $verbose_mode"
   sketchybar --trigger aerospace_toggle_app_icons SENDER=aerospace_toggle_app_icons
+elif [ "$SENDER" = "aerospace_node_moved_to_workspace" ]; then
+  focused_workspace=$(aerospace list-workspaces --focused)
+  display_id=${NAME: -1}
+  monitor_id=$(get_monitor_id $display_id)
+
+  echo "node_moved_to_workspace was triggered on $NAME, from $focused_workspace to $AEROSPACE_NEW_WORKSPACE in monitor $monitor_id"
+
+  if [[ $(is_workspace_in_monitor $focused_workspace $monitor_id) -eq "1" ]]; then
+    echo "Found workspace $focused_workspace in monitor $monitor_id"
+    app_id=$(compare_to_cache $focused_workspace)
+    echo "Found app id $app_id has moved to workspace $AEROSPACE_NEW_WORKSPACE"
+    move_app_to_workspace $app_id $focused_workspace $AEROSPACE_NEW_WORKSPACE
+  fi
+  # we need to extract the monitor id from the $NAME
+  # We need a function that checks if a workspace is in a certain monitor
+  # if from workspaces is in this element's monitor, we need to run the move functon
 fi
 

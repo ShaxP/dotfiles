@@ -93,6 +93,7 @@ function create_workspace_bracket_for_monitor() {
 
   sketchybar --add item  bracket_workspaces_spacer_left_$MONITOR_ID left \
            --subscribe bracket_workspaces_spacer_left_$MONITOR_ID aerospace_verbose_mode_toggled \
+           --subscribe bracket_workspaces_spacer_left_$MONITOR_ID aerospace_node_moved_to_workspace \
            --set       bracket_workspaces_spacer_left_$MONITOR_ID \
                        display="$display_id" \
                        width="8" \
@@ -142,6 +143,28 @@ function get_display_id() {
   echo $display_id
 }
 
+function get_monitor_id() {
+  DISPLAY_ID=$1
+  monitor_id=$(aerospace list-monitors --format "%{monitor-appkit-nsscreen-screens-id};%{monitor-id}" | awk -F ";" -v dispid=$DISPLAY_ID '{if ($2==dispid) {print $1}}')
+  echo $monitor_id
+}
+
+function is_workspace_in_monitor() {
+  WORKSPACE_ID=$1
+  MONITOR_ID=$2
+
+  workspaces_for_monitor_id=( $(aerospace list-workspaces --monitor $MONITOR_ID) )
+#  echo $workspaces_for_monitor_id
+  for workspace in ${workspaces_for_monitor_id[@]}; do
+    # echo "$workspace"
+    if [[ "$WORKSPACE_ID" -eq "$workspace" ]]; then
+      echo 1
+      return 1
+    fi
+  done
+  echo 0
+}
+
 AEROSPACE_CACHE_DIR=$CACHE_DIR/aerospace
 AEROSPACE_VERBOSE_FILE=$AEROSPACE_CACHE_DIR/verbose
 
@@ -186,3 +209,57 @@ function add_app_to_cache()
   WORKSPACE_ID=$2
   echo $APP_ID >> "$AEROSPACE_CACHE_DIR/$WORKSPACE_ID"
 }
+
+function reset_workspace_cache() {
+  WORKSPACE_ID=$1
+  
+  init_workspace_cache $WORKSPACE_ID 
+  
+  IFS=$'\n' apps=( $(aerospace list-windows --workspace $WORKSPACE_ID | awk 'BEGIN {FS="|"} {gsub(/^[ \t]+|[ \t]+$/, "", $1); print $1}' ) )
+  
+  app_count=${#apps[@]}
+  
+  if [[ "$app_count" -eq "0" ]]; then
+    return 1  
+  fi
+
+  for app in ${apps[@]}; do
+    app_id=$(echo $app | awk 'BEGIN {FS=":"} {print $1}')
+    add_app_to_cache $app_id $WORKSPACE_ID
+  done
+
+}
+
+function get_app_ids() {
+  WORKSPACE_ID=$1
+  
+  IFS=$'\n' apps=( $(aerospace list-windows --workspace $WORKSPACE_ID | awk 'BEGIN {FS="|"} {gsub(/^[ \t]+|[ \t]+$/, "", $1); print $1}' ) )
+
+  for app_id in ${apps[@]} ; do
+    echo $app_id
+  done
+}
+
+function get_cached_app_ids() {
+  WORKSPACE_ID=$1
+  filename="$AEROSPACE_CACHE_DIR/$WORKSPACE_ID"
+  cat $filename
+}
+
+function compare_to_cache() {
+  WORKSPACE_ID=$1
+  app_id=$(diff <(get_app_ids $WORKSPACE_ID | sort) <(get_cached_app_ids $WORKSPACE_ID | sort) | grep '>' | sed 's/^>\ //g')
+  echo $app_id
+}
+
+function move_app_to_workspace() {
+  APP_ID=$1
+  FROM_WORKSPACE_ID=$2
+  TO_WORKSPACE_ID=$3
+  sketchybar --move apps.$APP_ID after workspace.$TO_WORKSPACE_ID
+  reset_workspace_cache $TO_WORKSPACE_ID
+  reset_workspace_cache $FROM_WORKSPACE_ID
+  sketchybar --update
+  
+}
+
