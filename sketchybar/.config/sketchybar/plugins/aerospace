@@ -41,8 +41,13 @@ elif [ "$SENDER" = "aerospace_node_moved_to_workspace" ]; then
     echo "Found app id $app_id has moved to workspace $AEROSPACE_NEW_WORKSPACE"
     move_app_to_workspace $app_id $focused_workspace $AEROSPACE_NEW_WORKSPACE
   fi
-  # we need to extract the monitor id from the $NAME
-  # We need a function that checks if a workspace is in a certain monitor
-  # if from workspaces is in this element's monitor, we need to run the move functon
+elif [ "$SENDER" = "aerospace_service_mode_enabled_changed" ]; then
+  if [ "$AEROSPACE_SERVICE_MODE_ENABLED" = true ]; then
+    sketchybar --set $NAME \
+                     icon.color="$AEROSPACE_SERVICE_MODE_COLOR"
+  else
+    sketchybar --set $NAME \
+                     icon.color="$AEROSPACE_SERVICE_MODE_DISABLED_COLOR"
+  fi
 fi
 

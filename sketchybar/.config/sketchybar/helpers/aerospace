@@ -85,6 +85,21 @@ function create_workspace_item() {
     create_app_bracket_for_workspace $DISPLAY_ID $WORKSPACE_ID
 }
 
+function create_service_mode_indicator() {
+  MONITOR_ID=$1
+  DISPLAY_ID=$2
+
+  sketchybar --add item  service_mode."$MONITOR_ID" left \
+             --subscribe service_mode."$MONITOR_ID" aerospace_service_mode_enabled_changed \
+             --set       service_mode."$MONITOR_ID" \
+                         display="$DISPLAY_ID" \
+                         background.drawing=off \
+                         icon=$AEROSPACE_SERVICE_MODE_ICON \
+                         icon.padding_left="16" \
+                         icon.color="$AEROSPACE_SERVICE_MODE_DISABLED_COLOR" \
+                         script="$PLUGIN_DIR/aerospace"
+}
+
 function create_workspace_bracket_for_monitor() {
   active_workspace=$(aerospace list-workspaces --focused)
   MONITOR_ID=${@[1]}
@@ -112,29 +127,31 @@ function create_workspace_bracket_for_monitor() {
     fi
   done
 
-#  if [ $monitor_id -lt ${#monitor_ids[@]} ]; then
-#    sketchybar --add item bracket_workspaces_monitor_separator."$monitor_id" left \
-#               --set      bracket_workspaces_monitor_separator."$monitor_id" \
-#                          background.drawing=off \
-#                          label.padding_left="0" \
-#                          label.padding_right="0" \
-#                          label.font.size="$BACKGROUND_HEIGHT" \
-#                          label="|"
-#  else
-    sketchybar --add item bracket_workspaces_spacer_right_$MONITOR_ID left \
-               --set      bracket_workspaces_spacer_right_$MONITOR_ID \
-                          display=$display_id \
-                          width="8" \
-                          background.drawing=off \
-                          label.drawing=off
-#  fi
+  sketchybar --add item bracket_workspaces_monitor_separator."$monitor_id" left \
+             --set      bracket_workspaces_monitor_separator."$monitor_id" \
+                        background.drawing=off \
+                        display="$display_id" \
+                        label.padding_left="0" \
+                        label.padding_right="0" \
+                        label.font.size="$BACKGROUND_HEIGHT" \
+                        label="|"
 
-  sketchybar --add bracket workspaces."$MONITOR_ID" "/bracket\.*/" \
-             --set         workspaces."$MONITOR_ID" \
-                           display="$display_id" \
-                           background.padding_left="0" \
-                           background.corner_radius="$BRACKET_BACKGROUND_CORNER_RADIUS" \
-                           background.border_width="$BRACKET_BACKGROUND_BORDER_WIDTH"
+  create_service_mode_indicator $MONITOR_ID $display_id
+
+  sketchybar --add item bracket_workspaces_spacer_right_$MONITOR_ID left \
+             --set      bracket_workspaces_spacer_right_$MONITOR_ID \
+                        display=$display_id \
+                        width="8" \
+                        background.drawing=off \
+                        label.drawing=off
+
+
+ sketchybar --add bracket workspaces."$MONITOR_ID" "/bracket\.*/" "/workspace\.*/" "/app\.*/" "/service_mode\.*/" \
+            --set         workspaces."$MONITOR_ID" \
+                          display="$display_id" \
+                          background.padding_left="0" \
+                          background.corner_radius="$BRACKET_BACKGROUND_CORNER_RADIUS" \
+                          background.border_width="$BRACKET_BACKGROUND_BORDER_WIDTH"
 }
 
 function get_display_id() {

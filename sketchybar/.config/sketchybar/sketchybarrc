@@ -49,8 +49,6 @@ sketchybar --default "${default[@]}"
 # Left
 #source "$ITEM_DIR/aerospace"
 new_item aerospace left
-new_spacer left $BAR_SPACING_LEFT
-new_item service_mode left
 new_spacer left $BAR_SPACING_RIGHT
 source "$ITEM_DIR/front_app"
 

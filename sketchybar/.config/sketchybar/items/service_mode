@@ -24,7 +24,7 @@ service_mode_item_builder() {
                          script="$PLUGIN_DIR/$name $AEROSPACE_SERVICE_MODE_ENABLED"
 }
 
-sketchybar --add event aerospace_service_mode_enabled_changed
+# sketchybar --add event aerospace_service_mode_enabled_changed
 
 POSITION=$1
 build_toggle_bracket service_mode $POSITION $SERVICE_MODE_DISABLED_COLOR false
