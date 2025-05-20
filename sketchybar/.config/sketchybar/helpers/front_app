@@ -33,7 +33,7 @@ get_app_icon() {
     "Adobe Photoshop 2025") 
       icon=
       ;;
-    Netflix|"Sky Showtime") 
+    Netflix|"Sky Showtime"|Max) 
       icon=
       ;;
     "Prime Video")
