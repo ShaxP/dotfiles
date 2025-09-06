@@ -66,12 +66,12 @@ automatically-unhide-macos-hidden-apps = false
 #                 See:
 #                 https://nikitabobko.github.io/AeroSpace/guide#assign-workspaces-to-monitors
 [gaps]
-    inner.horizontal = 32
-    inner.vertical =   32
-    outer.left =       32
-    outer.bottom =     32
-    outer.top =        64
-    outer.right =      32
+    inner.horizontal = 16 
+    inner.vertical =   16
+    outer.left =       16
+    outer.bottom =     16
+    outer.top =        96
+    outer.right =      16
 
 # Assigning workspace 9 to secondary display
 [workspace-to-monitor-force-assignment]

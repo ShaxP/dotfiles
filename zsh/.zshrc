@@ -119,6 +119,8 @@ source /opt/homebrew/opt/zsh-vi-mode/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh
 # Activate zsh-syntax-highlighling
 source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
+# Adding Zoxdie (alternative cd) config
+eval "$(zoxide init zsh)"
 
 # Set personal aliases, overriding those provided by Oh My Zsh libs,
 # plugins, and themes. Aliases can be placed here, though Oh My Zsh
@@ -134,6 +136,7 @@ source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 alias vi="nvim"
 alias vim="nvim"
 alias ez="vim ~/.zshrc"
+alias cd=z
 alias rh="source ~/.zshrc"
 alias top=htop
 alias repos="cd ~/source/repos"
@@ -151,6 +154,20 @@ alias lta1="eza -lTag --level=1"
 alias lta2="eza -lTag --level=2"
 alias lta3="eza -lTag --level=3"
 alias stow="stow -t ~/."
+
+# Use outlook to launch Microsoft Outlook
+function outlook() {
+  open -n -a "Microsoft Outlook"
+}
+
+function poush() {
+  open -n /Applications/Google\ Chrome.app --args --new-window --profile-directory="Profile 1" "https://orgac8e7d8c.crm4.dynamics.com/main.aspx?appid=292ecc3d-20c1-ec11-983f-000d3addc675&pagetype=entitylist&etn=crb8d_expense&viewid=dd084143-4579-4f34-aa2c-e0d7f787d510&viewType=1039"
+}
+
+function eon() {
+    open -n /Applications/Google\ Chrome.app --args --new-window --profile-directory="Profile 4" "https://teams.microsoft.com.mcas.ms/v2/"
+  open -n /Applications/Google\ Chrome.app --args --new-window --profile-directory="Profile 4" "https://outlook.office.com.mcas.ms/mail/"
+}
 # Use y to launch yazi
 function y() {
 	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd

@@ -8,7 +8,7 @@ source "$HELPERS_DIR/aerospace"
 if [ "$SENDER" = "aerospace_toggle_app_icons" ]; then
   if [[ "$(get_verbose_mode)" -eq "1" ]]; then
     visible="on"
-    width="24"
+    width="$ICON_WIDTH"
   else
     visible="off"
     width="0"
