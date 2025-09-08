@@ -3,80 +3,133 @@
 source "$CONFIG_DIR/environment"
 source "$THEME_DIR/catppuccin"
 
+get_app_icon_2() {
+  app_name=$1
+#   icon=$(printf '\uf120')
+  icon='\ue920'
+  # print $icon
+  echo $icon
+}
+
 get_app_icon() {
   app_name=$1
   case $app_name in
-    Terminal|kitty|iTerm2) 
-      icon=
+    "System Settings")
+      icon='\uf013'
+      ;;
+    Terminal|iTerm2) 
+      icon='\uf120'
+      ;;
+    kitty)
+      icon='\ue909'
       ;;
     Calculator) 
-      icon=
+      icon='\uf1ec'
       ;;
     Safari) 
-      icon=
+      icon='\uf267'
       ;;
     LinkedIn) 
-      icon=
+      icon='\uf08c'
       ;;
     Dock|Docker|"Docker Desktop") 
-      icon=
+      icon='\uf395'
       ;;
     YouTube) 
-      icon=
+      icon='\uf167'
       ;;
     "Google Chrome") 
-      icon=
+      icon='\uf268'
       ;;
     Messages) 
-      icon=
+      icon='\ue913'
       ;;
     "Adobe Photoshop 2025") 
-      icon=
+      icon='\ue902'
       ;;
-    Netflix|"Sky Showtime"|Max) 
-      icon=
+    "Adobe Illustrator 2025") 
+      icon='\ue903'
+      ;;
+    Netflix)
+      icon='\ue90b'
+      ;;
+    "Sky Showtime")
+      icon='\ue90a'
+      ;;
+    "HBO Max") 
+      icon='\ue90c'
       ;;
     "Prime Video")
-      icon=
+      icon='\uf270'
+      ;;
+    TV)
+      icon='\ue90d'
+      ;;
+    "O'Reilly")
+      icon='\ue906'
       ;;
     Finder)
-      icon=
+      icon='\ue900'
       ;;
     "Microsoft Outlook") 
-      icon=
+      icon='\ue90e'
       ;;
     Reminders) 
-      icon=
+      icon='\uf0ae'
       ;;
     Notes) 
-      icon=
+      icon='\uf249'
+      ;;
+    TextEdit)
+      icon='\uf044'
       ;;
     Acrobat) 
-      icon=
+      icon='\ue904'
       ;;
-    Code|Cursor) 
-      icon=
+    Code) 
+      icon='\ue907'
+      ;;
+    Cursor) 
+      icon='\ue912'
+      ;;
+    Xcode) 
+      icon='\ue908'
       ;;
     Preview) 
-      icon=
+      icon='\uf5f5'
       ;;
     "Font Book") 
       icon=
       ;;
     "Microsoft Excel")
-      icon=
+      icon='\ue911'
       ;;
     "Microsoft Word")
-      icon=
+      icon='\ue90f'
       ;;
     "Microsoft PowerPoint")
-      icon=
+      icon='\ue910'
       ;;
     Medium)
-      icon=
+      icon='\uf23a'
+      ;;
+    "ChatGPT")
+      icon='\ue7cf'
+      ;;
+    "App Store")
+      icon='\uf370'
+      ;;
+    Figma)
+      icon='\uf799'
+      ;;
+    reMarkable)
+      icon='\ue905'
+      ;;
+    FaceTime)
+      icon='\ue901'
       ;;
     *) 
-      icon=
+      icon='\uf40e'
       ;;
   esac
   echo $icon
@@ -85,8 +138,11 @@ get_app_icon() {
 get_app_icon_font() {
   app_name=$1
   case $app_name in
-    Finder|LinkedIn|Dock|Docker|"Docker Desktop"|YouTube|"Google Chrome"|"Prime Video"|Medium) 
+    Figma|"App Store"|Safari|LinkedIn|Dock|Docker|"Docker Desktop"|YouTube|"Google Chrome"|"Prime Video"|Medium|"ChatGPT") 
       icon_font="$ICON_FONT_BRANDS"
+      ;;
+    FaceTime|Messages|reMarkable|TV|Finder|kitty|"Sky Showtime"|Netflix|"HBO Max"|"O'Reilly"|"Adobe Photoshop 2025"|"Adobe Illustrator 2025"|Acrobat|"Microsoft Excel"|"Microsoft Word"|"Microsoft PowerPoint"|Xcode|Code|Cursor|"Microsoft Outlook")
+      icon_font="$APPICON_FONT"
       ;;
     *) 
       icon_font="$ICON_FONT"
@@ -94,3 +150,8 @@ get_app_icon_font() {
   esac
   echo $icon_font 
 }
+
+get_app_icon_font2() {
+  echo "$APPICON_FONT"
+}
+

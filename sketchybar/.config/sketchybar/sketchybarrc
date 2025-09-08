@@ -53,15 +53,15 @@ new_spacer left $BAR_SPACING_RIGHT
 source "$ITEM_DIR/front_app"
 
 # Right
-new_item clock right
-new_spacer right $BAR_SPACING_RIGHT
-new_item calendar right
-new_spacer right $BAR_SPACING_RIGHT
-new_item volume right
-new_spacer right $BAR_SPACING_RIGHT
-new_item battery right
-new_spacer right $BAR_SPACING_RIGHT
-new_item keyboard right
+# new_item clock right
+# new_spacer right $BAR_SPACING_RIGHT
+# new_item calendar right
+# new_spacer right $BAR_SPACING_RIGHT
+# new_item volume right
+# new_spacer right $BAR_SPACING_RIGHT
+# new_item battery right
+# new_spacer right $BAR_SPACING_RIGHT
+# new_item keyboard right
 # Automatically apply configuration changes
 sketchybar --hotload on
 
