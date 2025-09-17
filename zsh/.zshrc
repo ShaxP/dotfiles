@@ -15,6 +15,7 @@ eval "$(starship init zsh)"
 #fi
 
 # If you come from bash you might have to change your $PATH.
+export PATH=$HOME/.local/bin:$PATH
 # export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
 
 # Path to your Oh My Zsh installation.
@@ -186,3 +187,8 @@ function ff() {
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 #[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+# The following lines have been added by Docker Desktop to enable Docker CLI completions.
+fpath=(/Users/shahram/.docker/completions $fpath)
+autoload -Uz compinit
+compinit
+# End of Docker CLI completions
