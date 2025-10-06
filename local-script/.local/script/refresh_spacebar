@@ -1,0 +1,6 @@
+swift -e '
+import Foundation
+let center = DistributedNotificationCenter.default()
+center.postNotificationName(NSNotification.Name("SpacebarRefreshWorkspaces"), object: nil, userInfo: nil, deliverImmediately: true)
+print("✅ Spacebar refreshed")
+    '
